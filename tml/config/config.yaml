@@ -1,0 +1,10 @@
+batch_size: 8
+epochs: 10
+sampling_num: 25
+drop_it: 100
+pscore_cf: 0.2
+auc_cf: 0.9
+tpr_cf: 0.95
+input_path: '../data/test1.csv'
+out_path: '../logs/output'
+sample_name: 'DigiPico'
