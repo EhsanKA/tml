@@ -1,7 +1,7 @@
 import argparse
 import yaml
 import pytorch_lightning as pl
-from training.trainer import MutLXTrainer
+from training.trainer import tmlTrainer
 from pytorch_lightning.loggers import TensorBoardLogger
 
 if __name__ == "__main__":
