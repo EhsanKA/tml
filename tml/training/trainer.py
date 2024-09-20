@@ -1,11 +1,13 @@
 import pytorch_lightning as pl
 import torch
 from sklearn.preprocessing import StandardScaler
+from tml.utils.data import load_and_preprocess_data
+from tml.models.model import build_model
 
 class tmlTrainer(pl.LightningModule):
     def __init__(self, input_dim, nb_classes=2, model_type='ml-binary'):
         super(tmlTrainer, self).__init__()
-        self.model = model(input_dim, nb_classes, model_type)
+        self.model = build_model(input_dim, nb_classes, model_type)
         self.loss_fn = torch.nn.BCELoss()
 
     def forward(self, x):

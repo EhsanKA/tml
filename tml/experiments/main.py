@@ -1,8 +1,11 @@
 import argparse
 import yaml
 import pytorch_lightning as pl
-from training.trainer import tmlTrainer
+from tml.training.trainer import tmlTrainer
 from pytorch_lightning.loggers import TensorBoardLogger
+
+
+
 
 if __name__ == "__main__":
     # Load config
@@ -17,7 +20,7 @@ if __name__ == "__main__":
     logger = TensorBoardLogger("logs", name=config['sample_name'])
 
     # Initialize model and trainer
-    model = MutLXTrainer(input_dim=42, nb_classes=2)
+    model = tmlTrainer(input_dim=42, nb_classes=2)
     trainer = pl.Trainer(max_epochs=config['epochs'], logger=logger)
 
     # Train model
