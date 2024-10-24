@@ -6,9 +6,8 @@ A comprehensive package for Transductive Machine Learning
 ## Installation
 
 ```bash
-git clone 
-cd tml
-pip install .
+pip install git+https://github.com/EhsanKA/tml.git
+
 ```
 
 From source
