@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import torch
 from pytorch_lightning.loggers import TensorBoardLogger
+import os
 
 from tml.data.get_l1_l2 import (
     prepare_level1_training_set,
@@ -28,7 +29,7 @@ def pipeline(config_path):
 
     cols = range(1, config['num_cols']+1)
     config['input_dim'] = len(cols) - 1
-    
+
     # Load data and normalize
     load_dict =load_and_preprocess_data(config['input_path'], cols)
     out1 = load_dict['out1']
@@ -84,6 +85,9 @@ def pipeline(config_path):
 
         # Save the model
         checkpoint_path = f"{config['out_path']}/{config['sample_name']}_logistic_{cnt}.ckpt"
+        os.makedirs(os.path.dirname(checkpoint_path), exist_ok=True)
+
+        # Save the model
         torch.save(model_L2.state_dict(), checkpoint_path)
 
         # Level 2 testing
