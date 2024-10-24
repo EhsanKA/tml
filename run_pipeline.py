@@ -46,7 +46,7 @@ def pipeline(config_path):
 
         # Level 1 training
         print(f"Level 1 training: subset {cnt+1}")
-        model_L1 = train_model(
+        model_L1, _ = train_model(
             train_set=train_set_L1,
             input_dim=config['input_dim'],
             nb_classes=config['nb_classes']-1,
@@ -72,7 +72,7 @@ def pipeline(config_path):
 
         # Level 2 training
         print(f"Level 2 training: subset {cnt+1}")
-        model_L2 = train_model(
+        model_L2, checkpoint_path_L2 = train_model(
             train_set=train_set_L2,
             input_dim=config['input_dim'],
             nb_classes=config['nb_classes']-1,
@@ -80,15 +80,15 @@ def pipeline(config_path):
             max_epochs=config['epochs'],
             dropout_rate=config['dropout_rate'],
             learning_rate=config['learning_rate'],
-            logger=logger
+            logger=logger,
+            cnt=cnt+1,
+            save=True
         )
 
-        # Save the model
-        checkpoint_path = f"{config['out_path']}/{config['sample_name']}_logistic_{cnt}.ckpt"
-        os.makedirs(os.path.dirname(checkpoint_path), exist_ok=True)
-
-        # Save the model
-        torch.save(model_L2.state_dict(), checkpoint_path)
+        # Ensure out1 has two dimensions
+        print(f"out1 dims: {out1.ndim}")
+        if out1.ndim == 1:
+            out1 = out1.reshape(-1, 1)
 
         # Level 2 testing
         print(f"Level 2 test: subset {cnt+1}")
@@ -97,24 +97,20 @@ def pipeline(config_path):
         out1 = np.hstack((out1, y_pred_all))
 
         # Predict with dropout
-        # model_T2 = BinaryClassificationLightning(input_dim=config['input_dim'],
-        #                                          dropout_rate=config['dropout_rate'])
+
+        # model_T2 = BinaryClassificationLightning.load_from_checkpoint(
+        #     checkpoint_path_L2,
+        #     input_dim=config['input_dim'],
+        #     dropout_rate=config['dropout_rate'],
+        #     learning_rate=config['learning_rate'],
+        # )
+
+        # y_pred_dropout = model_T2.predict_with_dropout(load_dict['all_set'][:, 1:], config['drop_it'])
+        y_pred_dropout = model_L2.predict_with_dropout(load_dict['all_set'][:, 1:], config['drop_it'])
+
+        if out2_var.ndim == 1:
+            out2_var = out2_var.reshape(-1, 1)
         
-        # model_T2 = BinaryClassificationLightning(input_dim=config['input_dim'],
-        #                                          dropout_rate=config['dropout_rate'])
-        
-
-        # checkpoint_path = './output/level2_subset_1/best_model.ckpt'
-        model_T2 = BinaryClassificationLightning.load_from_checkpoint(
-            checkpoint_path,
-            input_dim=config['input_dim'],
-            dropout_rate=args.dropout_rate,
-            learning_rate=args.learning_rate,
-        )
-
-
-        # model_T2.load_state_dict(torch.load(checkpoint_path))
-        y_pred_dropout = model_T2.predict_with_dropout(load_dict['all_set'][:, 1:], config['drop_it'])
         y_pred_var = np.var(y_pred_dropout, axis=0).reshape(-1, 1)
         out2_var = np.hstack((out2_var, y_pred_var))
 
@@ -128,6 +124,9 @@ def pipeline(config_path):
     
 
     # Plot and calculate thresholds
+    os.makedirs(config['out_path'], exist_ok=True)
+    
+
     thr = tml_plots(final,
                     load_dict['neg_ind'],
                     load_dict['hpos_ind'],
@@ -139,7 +138,7 @@ def pipeline(config_path):
 
     final = np.column_stack((final, np.repeat("PASS", len(y_pred_mvar))))
     final[final[:,1].astype(float) > thr, 2] = "FAIL_Uncertain"
-    final[final[:,0].astype(float) <= args.pscore_cf, 2] = "FAIL_LowScore"
+    final[final[:,0].astype(float) <= config['pscore_cf'], 2] = "FAIL_LowScore"
     save = np.column_stack((load_dict['names'], final))
     header = ['Mutation', 'Type', 'Probability_Score', 'Uncertainty_Score', 'Result']
     pd.DataFrame(save.astype(str)).to_csv(f"{config['out_path']}/{config['sample_name']}_scores.csv", header=header, index=None)
