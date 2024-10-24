@@ -25,7 +25,7 @@ class BinaryClassificationModel(nn.Module):
         ]
         if dropout_rate:
             layers.insert(2, nn.Dropout(dropout_rate))  # Add dropout layer
-            layers.insert(2, nn.Dropout(dropout_rate))  # Add dropout layer
+            layers.insert(5, nn.Dropout(dropout_rate))  # Add dropout layer
         self.model = nn.Sequential(*layers)
 
     def forward(self, x):
@@ -40,6 +40,7 @@ class BinaryClassificationLightning(pl.LightningModule):
         self.model = BinaryClassificationModel(input_dim, nb_classes, dropout_rate)
         self.loss_fn = nn.BCELoss()  # Use BCELoss since model outputs probabilities
         self.train_accuracy = torchmetrics.Accuracy(task='binary', threshold=0.5)
+        self.save_hyperparameters()
 
     def forward(self, x):
         return self.model(x).squeeze()
