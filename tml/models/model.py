@@ -39,7 +39,7 @@ class BinaryClassificationLightning(pl.LightningModule):
         self.learning_rate = learning_rate
         self.model = BinaryClassificationModel(input_dim, nb_classes, dropout_rate)
         self.loss_fn = nn.BCELoss()  # Use BCELoss since model outputs probabilities
-        self.train_accuracy = torchmetrics.Accuracy(threshold=0.5)
+        self.train_accuracy = torchmetrics.Accuracy(task='binary', threshold=0.5)
 
     def forward(self, x):
         return self.model(x).squeeze()
