@@ -27,7 +27,8 @@ def pipeline(config_path):
     logger = TensorBoardLogger("logs", name=config['sample_name'])
 
     cols = range(1, config['num_cols']+1)
-
+    config['input_dim'] = len(cols) - 1
+    
     # Load data and normalize
     load_dict =load_and_preprocess_data(config['input_path'], cols)
     out1 = load_dict['out1']
