@@ -15,12 +15,11 @@ authors = [
     ]
 
 dependencies = [
-    # "torch >= 1.0",
     "pytorch == 2.5.0",
     "pytorch-cuda == 12.4",
     "lightning == 2.4",
     "numpy",
-    "pandas,
+    "pandas",
     "tensorboard == 2.18",
     "scikit-learn",
     "seaborn", 
