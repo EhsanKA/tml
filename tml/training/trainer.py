@@ -5,7 +5,8 @@ from tml.models.model import BinaryClassificationLightning
 
 
 def train_model(train_set, input_dim, batch_size, max_epochs, logger,
-                 nb_classes=1, dropout_rate=None, learning_rate=1e-3):
+                 nb_classes=1, dropout_rate=None, learning_rate=1e-3,
+                 cnt=0, save=False):
     
     X_train = train_set[:, 1:]
     y_train = train_set[:, 0]
@@ -22,17 +23,6 @@ def train_model(train_set, input_dim, batch_size, max_epochs, logger,
                                           dropout_rate=dropout_rate,
                                           learning_rate=learning_rate
                                           )
-    
-    # checkpoint_monitor = 'train_loss'
-    # checkpoint_mode = 'min'
-
-    # checkpoint_callback = ModelCheckpoint(
-    #     monitor=checkpoint_monitor,
-    #     save_top_k=1,
-    #     mode=checkpoint_mode,
-    #     dirpath=f'{logger.save_dir}/{logger.name}/version_{logger.version}/checkpoints/',
-    #     filename='vae-{epoch:02d}-{val_loss:.2f}'
-    # )
 
     trainer = pl.Trainer(max_epochs=max_epochs,
                          enable_checkpointing=False,
@@ -41,5 +31,11 @@ def train_model(train_set, input_dim, batch_size, max_epochs, logger,
                          )
     
     trainer.fit(model, train_loader)
-    return model
+
+    # Save the final model checkpoint
+    checkpoint_path = f'{logger.save_dir}/{logger.name}/version_{logger.version}/checkpoints/model_{cnt}.ckpt'
+    if save:
+        trainer.save_checkpoint(checkpoint_path)
+
+    return model, checkpoint_path
 
