@@ -1,4 +1,5 @@
-tml/data/test1.csv
+data/test1.csv
+jobs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

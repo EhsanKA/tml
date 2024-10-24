@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tml"
+version = "0.1.0"
+description = "A python package. "
+readme = "README.md"
+requires-python = ">=3.10"
+# license = {file = "LICENSE.txt"}
+
+authors = [
+    {name = "Ehsan Karimiara", email = "e.karimiara@gmail.com" }
+    ]
+
+dependencies = [
+    # "torch >= 1.0",
+    "numpy"
+    ]
+
+[tool.setuptools]
+packages = ["tml"]
+# package-dir = {"" = "tml"}  # Correctly formatted dictionary, no trailing comma
+# packages = { find = { "where": ["tml"] } }  # Correctly formatted dictionary
+
