@@ -13,18 +13,18 @@ pip install .
 
 From source
 ```bash
-yes | conda create --name pika python=3.10
-conda activate pika
+yes | conda create --name tml python=3.11.10
+conda activate tml
 pip install -e .
 ```
 
-For contribution please install in dev mode and use pre-commit
+<!-- For contribution please install in dev mode and use pre-commit
 ```bash
 yes | conda create --name pika python=3.10
 conda activate pika
 pip install -e ".[dev]"
 pre-commit install
-```
+``` -->
 
 ## Usage
 
