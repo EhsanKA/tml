@@ -5,7 +5,9 @@ A comprehensive package for Transductive Machine Learning
 
 ## Installation
 
-
+<!-- the environment was created with this:
+`conda env export --from-history > environment.yaml`
+Note: consider removing the prefix line in the `environment.yaml` -->
 
 ```bash
 git clone https://github.com/EhsanKA/tml.git
