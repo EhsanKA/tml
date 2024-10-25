@@ -13,17 +13,7 @@ authors = [
     {name = "Ehsan Karimiara", email = "e.karimiara@gmail.com"}
 ]
 
-dependencies = [
-    "matplotlib>=3.9.0",
-    "numpy>=1.23",            
-    "pandas>=2.2.0",
-    "pytorch_lightning>=2.4.0",
-    "PyYAML>=6.0.0",
-    "scikit_learn>=1.5.0",
-    "seaborn>=0.13.0",
-    "torch>=2.5.0",
-    "torchmetrics>=1.5.0"
-]
+dependencies = []
 
 [project.optional-dependencies]
 dev = [

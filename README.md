@@ -10,6 +10,8 @@ A comprehensive package for Transductive Machine Learning
 ```bash
 git clone https://github.com/EhsanKA/tml.git
 cd tml
+conda env create --file environment.yaml
+conda activate tml
 pip install .
 ```
 
