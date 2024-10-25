@@ -5,27 +5,31 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "tml"
 version = "0.1.0"
-description = "A python package. "
+description = "A python package."
 readme = "README.md"
 requires-python = ">=3.11"
-# license = {file = "LICENSE.txt"}
 
 authors = [
-    {name = "Ehsan Karimiara", email = "e.karimiara@gmail.com" }
-    ]
+    {name = "Ehsan Karimiara", email = "e.karimiara@gmail.com"}
+]
 
 dependencies = [
-#    "pytorch == 2.5.0",
-#    "pytorch-cuda == 12.4",
-#    "lightning == 2.4",
-    "numpy",
-#    "pandas",
-#    "tensorboard == 2.18",
-#    "scikit-learn",
-#    "seaborn", 
-#    "matplotlib",
+    "matplotlib==3.9.2",
+    "numpy==2.1.2",
+    "pandas==2.2.3",
+    "pytorch_lightning==2.4.0",
+    "PyYAML==6.0.2",
+    "scikit_learn==1.5.2",
+    "seaborn==0.13.2",
+    "torch==2.5.0",
+    "torchmetrics==1.5.1"
+]
 
-    ]
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "black==23.1.0"
+]
 
 [tool.setuptools]
 packages = ["tml"]
