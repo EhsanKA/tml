@@ -3,34 +3,15 @@ A comprehensive package for Transductive Machine Learning
 ??
 
 
-## Setting Up the Environment
+## Installation
 
-To recreate the Conda environment used for this project, please follow these steps:
 
-1. Make sure you have Conda installed. If not, you can download and install Miniconda or Anaconda from:
-   - [Miniconda](https://docs.conda.io/en/latest/miniconda.html)
-   - [Anaconda](https://www.anaconda.com/products/distribution)
 
-2. Clone this repository:
-
-   ```sh
-   git clone https://github.com/EhsanKA/tml.git
-   cd tml
-
-3. Create the Conda environment using the provided YAML file:
-    
-    ```sh
-    conda env create --file=environment.yaml
-
-4. Activate the environment:
-    ```sh
-    conda activate tml
-
-5. install the package:
-
-    ```sh
-    pip install -e .
-
+```bash
+git clone https://github.com/EhsanKA/tml.git
+cd tml
+pip install .
+```
 
 
 <!-- ## Installation
