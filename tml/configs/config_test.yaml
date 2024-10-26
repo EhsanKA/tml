@@ -1,0 +1,23 @@
+seed: 42
+
+num_cols: 42
+nb_classes: 2
+dropout_rate: 0.8
+learning_rate: 1.0e-3
+
+batch_size: 8
+epochs: 2 # 10
+sampling_num: 2 # 25
+drop_it: 5 # 100
+
+upper_threshold: 0.7
+lower_threshold: 0.3
+
+pscore_cf: 0.2
+auc_cf: 0.9
+tpr_cf: 0.95
+
+input_path: 'data/test1.csv'
+out_path: 'logs/output_test'
+sample_name: 'DigiPico_torch_test'
+model_type: 'ml-binary'

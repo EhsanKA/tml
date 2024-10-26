@@ -148,7 +148,7 @@ def pipeline(config_path):
 if __name__ == "__main__":
     # Load config
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config', default="configs/config.yaml", help='Path to config file.')
+    parser.add_argument('--config', default="tml/configs/config.yaml", help='Path to config file.')
     args = parser.parse_args()
 
     pipeline(args.config)
