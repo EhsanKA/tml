@@ -2,7 +2,7 @@
 
 <!-- DropQ -->
 
-TML is a Python package for dropout-based uncertainty quantification in binary classification tasks. It’s designed for PyTorch Lightning users who need to perform high-confidence predictions, dataset pruning, and robust model training. DropQ accepts custom architectures, enabling flexible and reliable predictions in real-world scenarios.
+TML is a Python package for dropout-based uncertainty quantification in binary classification tasks. It’s designed for PyTorch Lightning users who need to perform high-confidence predictions, dataset pruning, and robust model training. TML accepts custom architectures, enabling flexible and reliable predictions in real-world scenarios.
 
 
 ## Installation
