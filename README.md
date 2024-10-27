@@ -43,7 +43,7 @@ pre-commit install
 
 Nested keys can be parsed as below as long as all keys are present in the config
 ```bash
-python run_pipeline.py --config configs/config.yaml
+python run_pipeline.py --config tml/configs/config.yaml
 ```
 
 ### Python

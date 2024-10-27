@@ -82,11 +82,11 @@ def pipeline(config_path):
             learning_rate=config['learning_rate'],
             logger=logger,
             cnt=cnt+1,
-            save=True
+            # save=True
         )
 
         # Ensure out1 has two dimensions
-        print(f"out1 dims: {out1.ndim}")
+        # print(f"out1 dims: {out1.ndim}")
         if out1.ndim == 1:
             out1 = out1.reshape(-1, 1)
 
@@ -106,6 +106,8 @@ def pipeline(config_path):
         # )
 
         # y_pred_dropout = model_T2.predict_with_dropout(load_dict['all_set'][:, 1:], config['drop_it'])
+
+        print(f"Level 2 test with dropout: subset {cnt+1}")
         y_pred_dropout = model_L2.predict_with_dropout(load_dict['all_set'][:, 1:], config['drop_it'])
 
         if out2_var.ndim == 1:
