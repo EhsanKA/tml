@@ -44,7 +44,7 @@ def plot_probability_score_distribution(data, minScore, out):
     plt.figure(figsize=(10, 6))
     for SNP in SNPs:
         subset = data[data[:, 2] == SNP]
-        sns.kdeplot(subset[:, 0].astype(float), shade=True, linewidth=3, clip=(0, 1), label=SNP)
+        sns.kdeplot(subset[:, 0].astype(float), fill=True, linewidth=3, clip=(0, 1), label=SNP)
     axes = plt.gca()
     ymin, ymax = axes.get_ylim()
     plt.ylim([-0.1, ymax])
