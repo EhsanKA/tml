@@ -52,7 +52,7 @@ def pipeline(config_path):
             nb_classes=config['nb_classes']-1,
             batch_size=config['batch_size'],
             max_epochs=config['epochs'],
-            dropout_rate=None,
+            # dropout_rate=None,
             learning_rate=config['learning_rate'],
             logger=logger
         )
@@ -78,7 +78,7 @@ def pipeline(config_path):
             nb_classes=config['nb_classes']-1,
             batch_size=config['batch_size'],
             max_epochs=config['epochs'],
-            dropout_rate=config['dropout_rate'],
+            # dropout_rate=config['dropout_rate'],
             learning_rate=config['learning_rate'],
             logger=logger,
             cnt=cnt+1,
