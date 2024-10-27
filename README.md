@@ -2,7 +2,7 @@
 
 <!-- DropQ -->
 
-TML is a Python package for dropout-based uncertainty quantification in binary classification tasks. It’s designed for PyTorch Lightning users who need to perform high-confidence predictions, dataset pruning, and robust model training. TML accepts custom architectures, enabling flexible and reliable predictions in real-world scenarios.
+TML is a Python package for dropout-based uncertainty quantification in binary classification tasks for pruning the uncertain data. It’s designed for PyTorch Lightning users who need to perform high-confidence predictions, dataset pruning, and robust model training. TML accepts custom architectures, enabling flexible and reliable predictions in real-world scenarios.
 
 
 ## Installation
@@ -48,7 +48,19 @@ python run_pipeline.py --config tml/configs/config.yaml
 
 ### Python
 
-Please check [notebooks](?) for examples.
+Please check [notebooks](notebooks/comparing_outputs_tf_torch.ipynb) for comparing the existing tf version (DigiPico) and the new torch implementation.
+
+
+## Results for test1:
+
+## Results
+
+| PyTorch | TensorFlow |
+|---------|------------|
+| ![Germline](notebooks/torch_Germline.png) | ![Germline](notebooks/tf_Germline.png) |
+| ![Probability Score](notebooks/torch_Probability_Score.png) | ![Probability Score](notebooks/tf_Probability_Score.png) |
+| ![ROC](notebooks/torch_ROC.png) | ![ROC](notebooks/tf_ROC.png) |
+| ![UTDs](notebooks/torch_UTDs.png) | ![UTDs](notebooks/tf_UTDs.png) |
 
 
 ## Dataset

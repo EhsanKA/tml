@@ -12,7 +12,6 @@ from tml.data.get_l1_l2 import (
     prune_test_set,
 )
 from tml.data.load_data import load_and_preprocess_data
-from tml.models.model import BinaryClassificationLightning
 from tml.plotting.plotting import tml_plots
 from tml.training.trainer import train_model
 from tml.utils.utils import load_config
@@ -86,7 +85,6 @@ def pipeline(config_path):
         )
 
         # Ensure out1 has two dimensions
-        # print(f"out1 dims: {out1.ndim}")
         if out1.ndim == 1:
             out1 = out1.reshape(-1, 1)
 
@@ -98,15 +96,6 @@ def pipeline(config_path):
 
         # Predict with dropout
 
-        # model_T2 = BinaryClassificationLightning.load_from_checkpoint(
-        #     checkpoint_path_L2,
-        #     input_dim=config['input_dim'],
-        #     dropout_rate=config['dropout_rate'],
-        #     learning_rate=config['learning_rate'],
-        # )
-
-        # y_pred_dropout = model_T2.predict_with_dropout(load_dict['all_set'][:, 1:], config['drop_it'])
-
         print(f"Level 2 test with dropout: subset {cnt+1}")
         y_pred_dropout = model_L2.predict_with_dropout(load_dict['all_set'][:, 1:], config['drop_it'])
 
@@ -115,8 +104,6 @@ def pipeline(config_path):
         
         y_pred_var = np.var(y_pred_dropout, axis=0).reshape(-1, 1)
         out2_var = np.hstack((out2_var, y_pred_var))
-
-    # You can now use out1 and out2_var as needed
 
     # Calculate final results and save
     print("Calculate final results")
