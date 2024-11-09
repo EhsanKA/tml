@@ -24,10 +24,10 @@ def ensure_tensors(data, hard_targets):
 
     # Check if `data` is a tensor; if not, convert it
     if not isinstance(data, torch.Tensor):
-        data = torch.tensor(data)
+        data = torch.tensor(data, dtype=torch.float32)
 
     # Check if `hard_targets` is a tensor; if not, convert it
     if not isinstance(hard_targets, torch.Tensor):
-        hard_targets = torch.tensor(hard_targets)
+        hard_targets = torch.tensor(hard_targets, dtype=torch.long)
 
     return data, hard_targets
