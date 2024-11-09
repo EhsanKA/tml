@@ -68,3 +68,13 @@ class BalancedSampler:
         sampled_data = self.dataset.data[sampled_indices]
         sampled_labels = self.dataset.labels[sampled_indices]
         return TMLDataset(sampled_data, sampled_labels)
+
+
+# Function to prune the test set
+def prune(labels, y_pred, lower_thresh=0.3, upper_thresh=0.7):
+    """
+    Prune the test set based on the predicted probabilities and thresholds.
+    """
+    TPs = [ind for ind, (label, pred) in enumerate(zip(labels, y_pred)) if label == 1 and pred > lower_thresh]
+    TNs = [ind for ind, (label, pred) in enumerate(zip(labels, y_pred)) if label == 0 and pred < upper_thresh]
+    return TPs, TNs
