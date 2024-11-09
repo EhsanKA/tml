@@ -22,4 +22,3 @@ def prepare_level2_training_set(TPs, TNs, test_set, cnt):
     indices = np.sort(np.concatenate((TPs_subset, TNs)))
     train_set = test_set[indices]
     return train_set
-
