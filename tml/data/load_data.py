@@ -19,8 +19,8 @@ def load_and_preprocess_data(input_path, cols):
     all_set[:, 1:] = scaler.transform(all_set[:, 1:])
 
     prep_dict['all_set'] = all_set
-    prep_dict['out1'] = all_set[:, 0]
-    prep_dict['out2_var'] = all_set[:, 0]
+    prep_dict['out1'] = test_set[:, 0]
+    prep_dict['out2_var'] = test_set[:, 0]
     prep_dict['test_set'] = test_set
 
 
