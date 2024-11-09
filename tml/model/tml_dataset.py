@@ -20,48 +20,51 @@ class TMLDataset(Dataset):
     def __len__(self):
         return len(self.data)
 
+import numpy as np
+import torch
+from torch.utils.data import Dataset
+
 class BalancedSampler:
-    def __init__(self, dataset, seed=42):
+    def __init__(self, dataset, indices=None, seed=42):
+        # Set random seed for reproducibility
         np.random.seed(seed)
         torch.manual_seed(seed)
+        
+        # Use subset of dataset if indices are provided
+        if indices is not None:
+            # Filter data and labels based on the provided indices
+            data = dataset.data[indices]
+            labels = dataset.labels[indices]
+            self.dataset = TMLDataset(data, labels)
+        else:
+            # Use the original dataset
+            self.dataset = dataset
+        
+        # Assume labels should be binary (0 and 1)
+        labels = self.dataset.labels
+        self.rng = np.random.default_rng(seed)
 
-        # labels should be 0 or 1
-        labels = dataset.labels
-
-        # # Separate indices for each class based on identified labels
-        # unique_classes = torch.unique(labels)
-        # self.class_0_indices = (labels == unique_classes[0]).nonzero(as_tuple=True)[0]
-        # self.class_1_indices = (labels == unique_classes[1]).nonzero(as_tuple=True)[0]
-
+        # Separate indices by class
         self.class_0_indices = (labels == 0).nonzero(as_tuple=True)[0]
         self.class_1_indices = (labels == 1).nonzero(as_tuple=True)[0]
 
-        # Determine which is the smaller class
-        if len(self.class_0_indices) < len(self.class_1_indices):
-            self.smaller_class_indices = self.class_0_indices
-            self.larger_class_indices = self.class_1_indices
+        # Determine smaller and larger class indices
+        if len(self.class_0_indices) <= len(self.class_1_indices):
+            self.smaller_class_indices, self.larger_class_indices = self.class_0_indices, self.class_1_indices
         else:
-            self.smaller_class_indices = self.class_1_indices
-            self.larger_class_indices = self.class_0_indices
+            self.smaller_class_indices, self.larger_class_indices = self.class_1_indices, self.class_0_indices
 
         self.min_class_size = len(self.smaller_class_indices)
-        self.dataset = dataset
-        self.rng = np.random.default_rng(seed)  # Use a random generator for efficiency
 
     def sample_balanced_subset(self):
-        sampled_smaller_class_indices = self.smaller_class_indices
-        
-        # Sample min_class_size from the larger class
+        # Sample all from smaller class and an equal number from the larger class
         sampled_larger_class_indices = torch.tensor(
             self.rng.choice(self.larger_class_indices.numpy(), self.min_class_size, replace=False),
             dtype=torch.long
         )
+        sampled_indices = torch.cat((self.smaller_class_indices, sampled_larger_class_indices))
         
-        sampled_indices = torch.cat((sampled_smaller_class_indices, sampled_larger_class_indices))
-        
+        # Create the balanced dataset from sampled indices
         sampled_data = self.dataset.data[sampled_indices]
         sampled_labels = self.dataset.labels[sampled_indices]
-        
-        balanced_dataset = TMLDataset(sampled_data, sampled_labels)
-        return balanced_dataset
-
+        return TMLDataset(sampled_data, sampled_labels)
