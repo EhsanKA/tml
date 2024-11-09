@@ -29,7 +29,7 @@ def prep_typebased(path_full, cols):
     dataset[neg_ind, 0] = 0
     dataset[rest_pos_ind, 0] = 1
 
-    dataset = np.float64(dataset)
+    dataset = np.float32(dataset)
 
     print("Data Preparation Done!")
 
