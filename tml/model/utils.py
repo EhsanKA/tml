@@ -13,8 +13,9 @@ def get_input_shape(data):
         raise ValueError("Unsupported data type. Expecting torch tensor.")
 
     input_shape = data_shape[1:]
+    n_samples = data_shape[0]
 
-    return input_shape
+    return input_shape, n_samples
 
 
 def ensure_tensors(data, hard_targets):
