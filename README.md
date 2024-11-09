@@ -47,23 +47,17 @@ python run_pipeline.py --config tml/configs/config.yaml
 ```
 
 ### Python
-
-Please check [notebooks](notebooks/comparing_outputs_tf_torch.ipynb) for comparing the existing tf version (DigiPico) and the new torch implementation.
-
+<!-- 
+Please check [notebooks](notebooks/comparing_outputs_tf_torch.ipynb) for checking the torch implementation.
+ -->
 
 ## Results for test1:
 
-## Results
-
-| PyTorch | TensorFlow |
-|---------|------------|
-| ![Germline](notebooks/torch_Germline.png) | ![Germline](notebooks/tf_Germline.png) |
-| ![Probability Score](notebooks/torch_Probability_Score.png) | ![Probability Score](notebooks/tf_Probability_Score.png) |
-| ![ROC](notebooks/torch_ROC.png) | ![ROC](notebooks/tf_ROC.png) |
-| ![UTDs](notebooks/torch_UTDs.png) | ![UTDs](notebooks/tf_UTDs.png) |
 
 
 ## Dataset
+
+It is impotant the labels you have, are numericals withing two classes.
 
 Complete Datasets are available on ??
 
