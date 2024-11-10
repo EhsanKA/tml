@@ -1,7 +1,7 @@
 data/test1.csv
 jobs/
-logs/DigiPico_torch/
-logs/output/DigiPico_torch_scores.csv
+logs/
+logs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
