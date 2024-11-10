@@ -6,12 +6,12 @@ import torch
 from pytorch_lightning.loggers import TensorBoardLogger
 import os
 
-from tml.data.get_l1_l2 import (
+from tml.data_prep.get_l1_l2 import (
     prepare_level1_training_set,
     prepare_level2_training_set,
     prune_test_set,
 )
-from tml.data.load_data import load_and_preprocess_data
+from tml.data_prep.load_data import load_and_preprocess_data
 from tml.plotting.plotting import tml_plots
 from tml.training.trainer import train_model
 from tml.utils.utils import load_config
