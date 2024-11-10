@@ -1,7 +1,9 @@
 data/test1.csv
 jobs/
 logs/
-
+configs/
+plotting/
+data_prep/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
