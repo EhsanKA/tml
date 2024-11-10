@@ -1,6 +1,6 @@
 from tml.model.pipeline import Pipeline, ModelHandler
 from tml.models.model import BinaryClassificationLightning
-from tml.data.load_data import load_and_preprocess_data
+from tml.data_prep.load_data import load_and_preprocess_data
 
 # Prepare the data
 cols = range(1, 42+1)
@@ -12,7 +12,7 @@ data = dataset[:, 1:]
 hard_targets = dataset[:, 0]
 
 
-model_instance = BinaryClassificationLightning(input_dim=41, nb_classes=1, dropout_rate_train=0.5, dropout_rate_pred=0.5, learning_rate=0.001)
+model_instance = BinaryClassificationLightning(input_dim=41, nb_classes=1, dropout_rate=0.5, learning_rate=0.001)
 
 # OR
 
@@ -20,8 +20,7 @@ model_class = BinaryClassificationLightning
 model_config = {
     "input_dim": 41,
     "nb_classes": 1,
-    "dropout_rate_train": 0.5,
-    "dropout_rate_pred": 0.5,
+    "dropout_rate": 0.5,
     "learning_rate": 0.001
 }
 
