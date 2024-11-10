@@ -1,7 +1,7 @@
 data/test1.csv
 jobs/
 logs/
-logs/
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
