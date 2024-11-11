@@ -20,6 +20,15 @@ dev = [
     "pytest>=6.0",
     "black==23.1.0"
 ]
+benchmark = [
+    # Add any dependencies needed for benchmarking
+]
+datasets = [
+    # Add any dependencies specific to dataset management
+]
 
 [tool.setuptools]
 packages = ["tml"]
+
+[tool.setuptools.package-data]
+tml = ["models/*.py"]  # Includes models as data files (not part of the package itself)
