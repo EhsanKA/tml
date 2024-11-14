@@ -1,13 +1,5 @@
-
-# from tml.data.load_data import load_and_preprocess_data
-# from tml.data.get_l1_l2 import (
-#     prepare_level1_training_set,
-#     prepare_level2_training_set,
-#     prune_test_set,
-# )
-# from tml.training.trainer import train_model
-from tml.model.utils import get_input_shape, ensure_tensors
-from tml.model.tml_dataset import BalancedSampler, TMLDataset, prune
+from tml.utils import get_input_shape, ensure_tensors
+from tml.tml_dataset import BalancedSampler, TMLDataset, prune
 
 import pytorch_lightning as pl
 import torch
@@ -61,13 +53,13 @@ class Pipeline():
                  logger=None,
                  logger_name="default",
                  seed=42,
-                #  out1=None,
-                #  out2_var=None,
                  ):
         
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  
         self.model_handler = model_handler
         # data and hard_targets are tensors
         self.data, self.hard_targets = ensure_tensors(data, hard_targets)
+        self.data, self.hard_targets = self.data.to(self.device), self.hard_targets.to(self.device)
 
         self.probability_scores = None
         self.uncertainty_scores = None
@@ -80,11 +72,6 @@ class Pipeline():
         self.batch_size=batch_size
         self.max_epochs= max_epochs
         self.learning_rate= learning_rate
-    
-        # self.out1 = out1
-        # self.out2_var = out2_var
-
-
         self.lower_threshold = lower_threshold
         self.upper_threshold = upper_threshold
         self.drop_iterations = drop_iterations
@@ -128,42 +115,26 @@ class Pipeline():
         self.balanced_sampler = BalancedSampler(self.dataset, seed=self.seed)
         self.balanced_dataset = self.balanced_sampler.sample_balanced_subset()
 
-        self.train_set_L1 = self.balanced_dataset
-        # self.train_set_L1 = prepare_level1_training_set(self.load_dict['pos_ind'],
-        #                                                 self.load_dict['neg_ind'],
-        #                                                 self.load_dict['all_set'],
-        #                                                 self.seed
-        #                                                 )
-
     def train_level1(self):
         print(f"Level 1 training: subset {self.seed}")
-        self.model = self.model_handler.initialize_new_model()
-        train_loader = DataLoader(self.train_set_L1,
+        # self.model = self.model_handler.initialize_new_model()
+        self.model = self.model_handler.initialize_new_model().to(self.device)
+
+        train_loader = DataLoader(self.balanced_dataset,
                                   batch_size=self.batch_size,
                                   shuffle=True
                                   )
-        
         trainer = pl.Trainer(max_epochs=self.max_epochs,
                              enable_checkpointing=False,
                              accelerator='gpu' if torch.cuda.is_available() else 'cpu',
                              logger=self.logger
                              )
-    
         trainer.fit(self.model, train_loader)
-    
-        # self.model_L1, _ = train_model(
-        #     train_set=self.train_set_L1,
-        #     input_dim=self.input_dim,
-        #     nb_classes=self.nb_classes,
-        #     batch_size=self.batch_size,
-        #     max_epochs=self.max_epochs,
-        #     learning_rate=self.learning_rate,
-        #     logger=self.logger
-        # )
 
     def predict_level1(self):
         print(f"Level 1 predict: subset {self.seed}")
-        self.y_pred = self.model.predict(self.data_loader)
+        self.y_pred = self.predict(self.data_loader)
+        # self.y_pred = self.model.predict(self.data_loader)
 
     def prunning(self):
         print(f"Pruning: subset {self.seed}")
@@ -185,7 +156,9 @@ class Pipeline():
 
     def train_level2(self):
         print(f"Level 2 training: subset {self.seed}")
-        self.model = self.model_handler.initialize_new_model()
+        # self.model = self.model_handler.initialize_new_model()
+        self.model = self.model_handler.initialize_new_model().to(self.device)
+
 
         train_loader = DataLoader(self.train_set_L2,
                                   batch_size=self.batch_size,
@@ -216,7 +189,8 @@ class Pipeline():
         # if self.out1.ndim == 1:
         #     self.out1 = self.out1.reshape(-1, 1)
 
-        self.y_pred_all = self.model.predict(self.data_loader)
+        # self.y_pred_all = self.model.predict(self.data_loader)
+        self.y_pred_all = self.predict(self.data_loader)
         self.all_probs[self.step] = self.y_pred_all
         # self.y_pred_all = self.y_pred_all.reshape(-1, 1)
         # self.out1 = np.hstack((self.out1, self.y_pred_all))
@@ -260,10 +234,12 @@ class Pipeline():
         """
         self.model.eval()  # Ensure layers like BatchNorm are in eval mode
         self.enable_dropout()  # Activate dropout layers
+
+        self.model = self.model.to(self.device)  # Ensure model is on the correct device
         
         # Pre-allocate a tensor for all predictions
-        device = next(self.model.parameters()).device  # Get model device (CPU or GPU)
-        all_preds = torch.zeros((n_iter, self.n_samples), device=device)  # Use model's device
+        # device = next(self.model.parameters()).device  # Get model device (CPU or GPU)
+        all_preds = torch.zeros((n_iter, self.n_samples), device=self.device)  # Use model's device
 
         # Perform multiple stochastic forward passes
         for i in range(n_iter):
@@ -271,7 +247,7 @@ class Pipeline():
             with torch.no_grad():
                 for batch in dataloader:
                     X_batch = batch[0] if isinstance(batch, (list, tuple)) else batch  # Handle case where batch is (X, y)
-                    X_batch = X_batch.to(device).float()  # Move input to model's device and ensure float32
+                    X_batch = X_batch.to(self.device).float()  # Move input to model's device and ensure float32
                     y_pred = self.model(X_batch)
                     batch_preds.append(y_pred)  # Keep as tensor on the model's device
 
@@ -282,8 +258,6 @@ class Pipeline():
 
         # Convert all_preds to numpy at the end, after all iterations are done
         return all_preds.cpu().numpy()  # Shape: [n_iter, total_samples]
-
-    
 
     def enable_dropout(self):
         """Enable dropout layers for MC Dropout without affecting other layers."""
@@ -296,3 +270,26 @@ class Pipeline():
         for module in self.model.modules():
             if isinstance(module, torch.nn.Dropout):
                 module.eval()  # Set dropout back to eval mode
+
+    def predict(self, dataloader):
+        """
+        Predict without dropout, using a DataLoader.
+        Args:
+            dataloader (torch.utils.data.DataLoader): DataLoader containing input data.
+        Returns:
+            numpy.ndarray: Predicted probabilities.
+        """
+        self.model.eval()
+        self.disable_dropout() 
+        self.model = self.model.to(self.device)  # Ensure model is on the correct device
+        all_preds = []
+
+        with torch.no_grad():
+            for batch in dataloader:
+                X_batch = batch[0] if isinstance(batch, (list, tuple)) else batch  # Handle case where batch is (X, y)
+                X_batch = X_batch.to(self.device).float()  # Move input to model's device and ensure float32
+
+                y_pred_batch = self.model(X_batch)
+                all_preds.append(y_pred_batch.cpu().numpy())
+
+        return np.concatenate(all_preds, axis=0).squeeze()  # Concatenate all batch predictions
