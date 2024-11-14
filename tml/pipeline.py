@@ -66,7 +66,6 @@ class Pipeline():
 
 
         self.input_dim, self.n_samples = get_input_shape(self.data)
-        # self.load_dict = load_and_preprocess_data(config['input_path'], self.cols)
 
         # self.nb_classes=2-1
         self.batch_size=batch_size
@@ -117,7 +116,6 @@ class Pipeline():
 
     def train_level1(self):
         print(f"Level 1 training: subset {self.seed}")
-        # self.model = self.model_handler.initialize_new_model()
         self.model = self.model_handler.initialize_new_model().to(self.device)
 
         train_loader = DataLoader(self.balanced_dataset,
@@ -134,7 +132,6 @@ class Pipeline():
     def predict_level1(self):
         print(f"Level 1 predict: subset {self.seed}")
         self.y_pred = self.predict(self.data_loader)
-        # self.y_pred = self.model.predict(self.data_loader)
 
     def prunning(self):
         print(f"Pruning: subset {self.seed}")
@@ -149,10 +146,6 @@ class Pipeline():
                                                 seed=self.seed)
 
         self.train_set_L2 = self.balanced_sampler.sample_balanced_subset()
-        # self.train_set_L2 = prepare_level2_training_set(self.TPs,
-        #                                                 self.TNs,
-        #                                                 self.data,
-        #                                                 self.seed)
 
     def train_level2(self):
         print(f"Level 2 training: subset {self.seed}")
@@ -173,27 +166,11 @@ class Pipeline():
     
         trainer.fit(self.model, train_loader)
 
-        # self.model_L2, self.checkpoint_path_L2 = train_model(
-        #     train_set=self.train_set_L2,
-        #     input_dim=self.input_dim,
-        #     nb_classes=1,
-        #     batch_size=self.batch_size,
-        #     max_epochs=self.max_epochs,
-        #     learning_rate=self.learning_rate,
-        #     logger=self.logger,
-        #     cnt=self.seed,
-        # )
-
     def predict_level2(self):
         print(f"Level 2 predict: subset {self.seed}")
-        # if self.out1.ndim == 1:
-        #     self.out1 = self.out1.reshape(-1, 1)
 
-        # self.y_pred_all = self.model.predict(self.data_loader)
         self.y_pred_all = self.predict(self.data_loader)
         self.all_probs[self.step] = self.y_pred_all
-        # self.y_pred_all = self.y_pred_all.reshape(-1, 1)
-        # self.out1 = np.hstack((self.out1, self.y_pred_all))
 
     def predict_level2_with_dropout(self):
         print(f"Level 2 prediction with dropout: subset {self.seed}")
@@ -201,17 +178,11 @@ class Pipeline():
                                                         self.drop_iterations
                                                         )
 
-        # if self.out2_var.ndim == 1:
-        #     self.out2_var = self.out2_var.reshape(-1, 1)
-        # self.y_pred_var = np.var(self.y_pred_dropout, axis=0).reshape(-1, 1)
-        # self.out2_var = np.hstack((self.out2_var, self.y_pred_var))
         self.all_vars[self.step] = np.var(self.y_pred_dropout, axis=0)
         
 
     def get_probability_scores(self):
         print(f"Getting probability scores: subset {self.seed}")
-        # self.y_pred_mean_1 = np.mean(self.out1[:, 1:], axis=1)
-        # self.probability_scores = self.y_pred_mean_1
         self.probability_scores = np.mean(self.all_probs, axis=0)
 
 
@@ -237,8 +208,6 @@ class Pipeline():
 
         self.model = self.model.to(self.device)  # Ensure model is on the correct device
         
-        # Pre-allocate a tensor for all predictions
-        # device = next(self.model.parameters()).device  # Get model device (CPU or GPU)
         all_preds = torch.zeros((n_iter, self.n_samples), device=self.device)  # Use model's device
 
         # Perform multiple stochastic forward passes
