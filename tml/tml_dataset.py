@@ -11,7 +11,7 @@ class TMLDataset(Dataset):
         unique_classes = torch.unique(self.labels)
         if len(unique_classes) != 2:
             raise ValueError("The dataset should contain exactly two unique classes.")
-        if not torch.equal(unique_classes, torch.tensor([0, 1])):
+        if not torch.equal(unique_classes, torch.tensor([0, 1], device=self.data.device)):
             raise ValueError("The dataset should contain labels 0 and 1.")
 
     def __getitem__(self, index):
@@ -59,10 +59,13 @@ class BalancedSampler:
     def sample_balanced_subset(self):
         # Sample all from smaller class and an equal number from the larger class
         sampled_larger_class_indices = torch.tensor(
-            self.rng.choice(self.larger_class_indices.numpy(), self.min_class_size, replace=False),
+            # self.rng.choice(self.larger_class_indices.numpy(), self.min_class_size, replace=False),
+            self.rng.choice(self.larger_class_indices.cpu().numpy(), self.min_class_size, replace=False),
             dtype=torch.long
         )
-        sampled_indices = torch.cat((self.smaller_class_indices, sampled_larger_class_indices))
+        # sampled_indices = torch.cat((self.smaller_class_indices, sampled_larger_class_indices))
+        sampled_indices = torch.cat((self.smaller_class_indices.to(sampled_larger_class_indices.device), sampled_larger_class_indices))
+
         
         # Create the balanced dataset from sampled indices
         sampled_data = self.dataset.data[sampled_indices]
