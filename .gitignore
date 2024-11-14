@@ -5,6 +5,9 @@ configs/
 plotting/
 data_prep/
 utils/
+notebooks/old_test_mlp_example.ipynb
+notebooks/mnist_mlp.ipynb
+notebooks/comparing_outputs_tf_torch.ipynb
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -36,34 +36,35 @@ pip install -e ".[dev]"
 pre-commit install
 ``` -->
 
-## Usage
+<!-- ## Usage -->
 
-### Commandline
+<!-- ### Commandline
 
 
 Nested keys can be parsed as below as long as all keys are present in the config
 ```bash
 python run_pipeline.py --config tml/configs/config.yaml
-```
+``` -->
 
-### Python
+<!-- ### Python -->
 <!-- 
 Please check [notebooks](notebooks/comparing_outputs_tf_torch.ipynb) for checking the torch implementation.
  -->
 
-## Results for test1:
+## Results for MNIST Case 0-7:
+See [example notebook](notebooks/MNIST_MLP_0_7.ipynb) for usage
 
 
-
+<!-- 
 ## Dataset
 
 It is impotant the labels you have, are numericals withing two classes.
 
-Complete Datasets are available on ??
+Complete Datasets are available on ?? -->
 
-## Model Checkpoints 
-See [example notebook]() for usage
+<!-- ## Model Checkpoints 
+See [example notebook](notebooks/MNIST_MLP_0_7.ipynb) for usage
 
 ## Disclaimer
 
-All data and model checkpoints for tml are licensed under CC BY 4.0, permitting non-commercial use.
+All data and model checkpoints for tml are licensed under CC BY 4.0, permitting non-commercial use. -->
