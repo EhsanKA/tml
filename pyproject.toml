@@ -13,19 +13,19 @@ authors = [
     {name = "Ehsan Karimiara", email = "e.karimiara@gmail.com"}
 ]
 
-dependencies = []
+# dependencies = []
 
-[project.optional-dependencies]
-dev = [
-    "pytest>=6.0",
-    "black==23.1.0"
-]
-benchmark = [
-    # Add any dependencies needed for benchmarking
-]
-datasets = [
-    # Add any dependencies specific to dataset management
-]
+# [project.optional-dependencies]
+# dev = [
+#     "pytest>=6.0",
+#     "black==23.1.0"
+# ]
+# benchmark = [
+#     # Add any dependencies needed for benchmarking
+# ]
+# datasets = [
+#     # Add any dependencies specific to dataset management
+# ]
 
 [tool.setuptools]
 packages = ["tml"]
